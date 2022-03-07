@@ -1,0 +1,6 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Add new ToDo
+    about: made by config.yml
+    # edit {username} and {repo} for your environment
+    url: https://github.com/clearwaterkzk/TaskBoard/issues/new?template=custom.md&projects=clearwaterkzk%2FTaskBoard%2F1&labels=TaskBoard
