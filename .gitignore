@@ -2,3 +2,4 @@ input/
 *.ipynb_checkpoints
 *checkpoint.ipynb
 .ipynb_checkpoints
+start_kaggle_docker.sh
