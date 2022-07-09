@@ -19,6 +19,9 @@ kaggle_titanic
         jupyter lab --port=XXXX --ip=0.0.0.0 --NotebookApp.token="XXX" --allow-root
         ```
 
+- TODO  
+[access to TODO board](https://github.com/clearwaterkzk/kaggle_titanic/projects/1)
+
 
 ## Description
 Purpose of analysis : precdict whether they survived(1) or not(0) by usging passengers infomation.
@@ -79,8 +82,12 @@ Purpose of analysis : precdict whether they survived(1) or not(0) by usging pass
 
 
 ## Reference
+### how to kaggle
  - [Kaggle日記という戦い方](https://zenn.dev/fkubota/articles/3d8afb0e919b555ef068)
+ - [Dockerコンテナ内でKaggle APIをつかう](https://qiita.com/komiya_____/items/88f08e1b7348d3a4cd5e)
+
+
+### environment
  - [VSCodeでWSL2上のDockerコンテナ内コードをデバッグ](https://qiita.com/c60evaporator/items/fd019f5ac6eb4d612cd4)
  - [KagglerのためのGit入門](https://yutori-datascience.hatenablog.com/entry/2017/07/25/163702)
  - [GitHubを最強のToDo管理ツールにする](https://qiita.com/o_ob/items/fd45fba2a9af0ce963c3)
- - [Dockerコンテナ内でKaggle APIをつかう](https://qiita.com/komiya_____/items/88f08e1b7348d3a4cd5e)
