@@ -21,7 +21,7 @@ kaggle_titanic
 
 
 ## Description
-usging passengers infomation, precdict whether they survived(1) or not(0)
+Purpose of analysis : precdict whether they survived(1) or not(0) by usging passengers infomation.
 
 |Variable|Definition|Key|
 |--------|----------|---|
