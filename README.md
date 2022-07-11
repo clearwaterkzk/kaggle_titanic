@@ -62,11 +62,12 @@ Purpose of analysis : precdict whether they survived(1) or not(0) by usging pass
          - Fare(運賃)、Pclassと等しいのでは？高いほど助かる？
          - Cabin、救助用ボートから近いほど助かる？
 
-### 20200305
+### 20220305
  - まず、何も考えずにモデリングしてみて、そのあと特徴量エンジニアリングする。
  - ロジスティック回帰でモデリング
-     - 欠損値処理、カテゴリー変数を変換
-     - 変数選択
+     - 欠損値処理、カテゴリー変数を変換しないとモデリングできない.
+     - 変数選択  
+       簡単のため, 説明変数へのエンコーディングはなるべく少なくした.
          - 目的変数
              - Survived
          - 説明変数
@@ -78,16 +79,49 @@ Purpose of analysis : precdict whether they survived(1) or not(0) by usging pass
              - Fare 欠損値を平均値で埋める
              - Embarked 欠損値をSで埋め、one hot encoding
            
-     
+### 20220711
+ - ベースモデル作成
+    - 変数そのままでモデリングを行い, 変数重要度などを検討する.
+    - GBDTにする.
+        - 最低限の前処理で, 安定して高精度を得られるため.
+    - クロスバリデーションする.
+    - 再現性のためにseedを固定する.->seed_everything
+ - 特徴量管理を行いたい.
+
+
+
+## Exploratory Data Analysis
+ - pandas profiling
+    - Age
+        - 欠損あり.
+        - やや正規分布ライク.
+    - SibSp, Parch
+        - 同じような分布をしている.
+    - Ticket
+        - データ文字列の長さが異なるのが気になる.
+    - Fare
+        - 外れ値あり.
+        - 平均・中央値の何倍も支払っている人がいる.  
+          富裕層？生存率高い？
+    - Cabin
+        - 欠損多数あり. 多すぎて補完して使えないか?
+    - Embarked 
+        - 欠損少数あり. 最頻値での保管でよいか.
+    - Correlation
+        - 基本的に変数間の交互作用は表せないので注意.
+        - SurvivedとPclass, Fareが弱い相関. SurvivedとSexが強い相関.
 
 
 ## Reference
-### how to kaggle
+### How to kaggle
  - [Kaggle日記という戦い方](https://zenn.dev/fkubota/articles/3d8afb0e919b555ef068)
  - [Dockerコンテナ内でKaggle APIをつかう](https://qiita.com/komiya_____/items/88f08e1b7348d3a4cd5e)
+- [Kaggleで勝つデータ分析](https://www.amazon.co.jp/Kaggle%E3%81%A7%E5%8B%9D%E3%81%A4%E3%83%87%E3%83%BC%E3%82%BF%E5%88%86%E6%9E%90%E3%81%AE%E6%8A%80%E8%A1%93-%E9%96%80%E8%84%87-%E5%A4%A7%E8%BC%94-ebook/dp/B07YTDBC3Z)
 
-
-### environment
+### Environment
  - [VSCodeでWSL2上のDockerコンテナ内コードをデバッグ](https://qiita.com/c60evaporator/items/fd019f5ac6eb4d612cd4)
  - [KagglerのためのGit入門](https://yutori-datascience.hatenablog.com/entry/2017/07/25/163702)
  - [GitHubを最強のToDo管理ツールにする](https://qiita.com/o_ob/items/fd45fba2a9af0ce963c3)
+
+ ### Feature engireering
+ - [Kaggleで使えるFeather形式を利用した特徴量管理法](https://amalog.hateblo.jp/entry/kaggle-feature-management)

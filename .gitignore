@@ -3,3 +3,5 @@ input/
 *checkpoint.ipynb
 .ipynb_checkpoints
 start_kaggle_docker.sh
+notebook/ref.ipynb
+.devcontainer/

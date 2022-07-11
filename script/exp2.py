@@ -1,8 +1,10 @@
 ##### module #####
 import random
 import os
-import pandas as pd
+from tabnanny import verbose
+import lightgbm as lgb
 import numpy as np
+import pandas as pd
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split, KFold
@@ -18,7 +20,7 @@ def seed_everything(seed=1234):
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
     torch.backends.cudnn.deterministic=True
-seed_everything()
+# seed_everything()
 
 
 
@@ -37,18 +39,11 @@ age_std = data['Age'].std()
 data['Age'].fillna(np.random.randint(age_avg - age_std, age_avg + age_std), inplace=True)
 data['Fare'].fillna(np.mean(data['Fare']), inplace=True)
 data['Embarked'].fillna(('S'), inplace=True)
+data["Embarked"] = data["Embarked"].map({"S":0, "C":1, "Q":2}).astype(int)
 
-data_embarked = data['Embarked'].values.reshape(-1, 1)
-oh_encoder = OneHotEncoder(sparse=False)
-oh_encoder.fit(data_embarked)
-onehot = pd.DataFrame(oh_encoder.transform(data_embarked), 
-                        columns=oh_encoder.get_feature_names(),
-                        index=data.index,
-                        dtype=np.int8)
-onehot.rename(columns={"x0_C":"Embarked_C", "x0_Q":"Embarked_Q", "x0_S":"Embarked_S"}, inplace=True)
-data = data.drop(columns=["Embarked"])
-data = pd.concat([data, onehot], axis=1)
 
+
+categorical_features = ["Pclass", "Sex", "Embarked"]
 train = data[:len(train)]
 test = data[len(train):]
 
@@ -57,7 +52,16 @@ X_train = train.drop('Survived', axis=1)
 X_test = test.drop('Survived', axis=1)
 
 
+params = {
+    'objective': 'binary',
+    'max_bin': 300,
+    'learning_rate': 0.01,
+    'num_leaves': 40
+}
+
+oof_train = np.zeros((len(X_train),))
 cv = KFold(n_splits=5, shuffle=True)
+
 for fold_id, (train_index, valid_index) in enumerate(cv.split(X_train)):
     X_tr = X_train.loc[train_index, :]
     X_val = X_train.loc[valid_index, :]
@@ -65,12 +69,17 @@ for fold_id, (train_index, valid_index) in enumerate(cv.split(X_train)):
     y_val = y_train[valid_index]
 
     # modeling
-    clf = LogisticRegression(solver='liblinear')
-    clf.fit(X_tr, y_tr)
-    y_pred_train = clf.predict(X_tr)
-    y_pred_val = clf.predict(X_val)
-
     print("fold_id : ", fold_id)
-    print("train accuracy : ", accuracy_score(y_true=y_tr, y_pred=y_pred_train))
-    print("validation accuracy : ", accuracy_score(y_true=y_val, y_pred=y_pred_val))
+    lgb_train = lgb.Dataset(X_tr, y_tr, categorical_feature=categorical_features)
+    lgb_eval = lgb.Dataset(X_val, y_val, categorical_feature=categorical_features)
+    model = lgb.train(params, lgb_train,
+                        valid_sets=[lgb_train, lgb_eval],
+                        verbose_eval=10,
+                        num_boost_round=1000,
+                        early_stopping_rounds=10)
+    oof_train[valid_index] = model.predict(X_val, num_iteration=model.best_iteration)
+
     print("##########")
+
+y_pred_oof = (oof_train > 0.5).astype(int)
+print("validation accuracy ", accuracy_score(y_train, y_pred_oof))
