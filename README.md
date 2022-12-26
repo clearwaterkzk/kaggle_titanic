@@ -88,8 +88,9 @@ Purpose of analysis : precdict whether they survived(1) or not(0) by usging pass
     - 再現性のためにseedを固定する.->seed_everything
  - 特徴量管理を行いたい.
 
-
-
+### 20221226
+    - 可視化の方法を追加.
+    
 ## Exploratory Data Analysis
  - pandas profiling
     - Age
