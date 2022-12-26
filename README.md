@@ -89,8 +89,9 @@ Purpose of analysis : precdict whether they survived(1) or not(0) by usging pass
  - 特徴量管理を行いたい.
 
 ### 20221226
-    - 可視化の方法を追加.
-    
+- 可視化の方法を追加.
+    - 年齢のrangeで分けると10才未満どうかで大きく異なる.
+
 ## Exploratory Data Analysis
  - pandas profiling
     - Age
@@ -107,7 +108,7 @@ Purpose of analysis : precdict whether they survived(1) or not(0) by usging pass
     - Cabin
         - 欠損多数あり. 多すぎて補完して使えないか?
     - Embarked 
-        - 欠損少数あり. 最頻値での保管でよいか.
+        - 欠損少数あり. 最頻値での補完でよいか.
     - Correlation
         - 基本的に変数間の交互作用は表せないので注意.
         - SurvivedとPclass, Fareが弱い相関. SurvivedとSexが強い相関.
@@ -122,7 +123,9 @@ Purpose of analysis : precdict whether they survived(1) or not(0) by usging pass
 ### Environment
  - [VSCodeでWSL2上のDockerコンテナ内コードをデバッグ](https://qiita.com/c60evaporator/items/fd019f5ac6eb4d612cd4)
  - [KagglerのためのGit入門](https://yutori-datascience.hatenablog.com/entry/2017/07/25/163702)
+ - [Kaggle初心者向けgithub Tips](https://qiita.com/ssl_ds_sps/items/bd7a4337f7054c4a1bd2)
  - [GitHubを最強のToDo管理ツールにする](https://qiita.com/o_ob/items/fd45fba2a9af0ce963c3)
+
 
  ### Feature engireering
  - [Kaggleで使えるFeather形式を利用した特徴量管理法](https://amalog.hateblo.jp/entry/kaggle-feature-management)
